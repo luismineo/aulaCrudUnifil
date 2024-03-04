@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -9,7 +12,13 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @NotNull
+    @Size(min = 11, max = 13)
+    @Column(nullable = false)
     private String cpf;
+    @NotNull
+    @Column(nullable = false)
+    @Min(1)
     private double salary;
 
     public Employee(long id, String name, String cpf, double salary) {

@@ -4,6 +4,7 @@ import com.example.demo.model.Employee;
 import com.example.demo.model.Manager;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public Employee create(@RequestBody Employee employee){
+    public Employee create(@Valid @RequestBody Employee employee){
         return employeeService.create(employee);
     }
 
