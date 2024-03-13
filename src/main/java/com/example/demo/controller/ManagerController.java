@@ -1,39 +1,48 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Employee;
 import com.example.demo.model.Manager;
-import com.example.demo.repository.ManagerRepository;
+import com.example.demo.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/manager")
 public class ManagerController {
     @Autowired
-    ManagerRepository managerRepository;
+    ManagerService managerService;
 
     @GetMapping
     public List<Manager> managerList(){
-        return managerRepository.findAll();
+        return managerService.list();
     }
 
     @PostMapping
     public Manager create(@RequestBody Manager manager){
-        return managerRepository.save(manager);
+        return managerService.create(manager);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Manager> update(@PathVariable Long id, @RequestBody Manager manager){
-//        if(managerRepository.existsById(id)){
-//            manager.setId(id);
-//            return managerRepository.save(manager);
-//        } else{
-//            return null;
-//        };
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody Manager manager, @PathVariable Long id){
+        if(managerService.update(manager, id) == null){
+            String message = "ID doesn't exists";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+        }
+        //return ResponseEntity.ok(employeeService.update(employee, id));
+        return ResponseEntity.ok(manager);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        if(managerService.delete(id)){
+            String message = "ID: " + id + " was successfully deleted";
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
+        String message = "ID doesn't exists";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
 
 }
